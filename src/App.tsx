@@ -747,33 +747,33 @@ export default function App() {
         pointerEvents: 'none', 
         zIndex: '-50'
       }}>
-        <div ref={exportRef} className="w-[800px] bg-[#0f172a] p-12 text-white font-sans" style={{ minHeight: '1000px' }}>
-          <div className="mb-12 border-b border-slate-800 pb-8 flex justify-between items-end">
+        <div ref={exportRef} className="w-[800px] p-12 font-sans" style={{ minHeight: '1000px', backgroundColor: '#0f172a', color: '#ffffff' }}>
+          <div className="mb-12 pb-8 flex justify-between items-end" style={{ borderBottom: '1px solid #1e293b' }}>
              <div>
-                <h2 className="text-3xl font-black tracking-tight mb-2">TRADER TAMIM STEP — Step Calculator</h2>
-                <p className="text-xl text-slate-500 font-bold">Win Multiplier: {winMultiplier}x</p>
+                <h2 className="text-3xl font-black tracking-tight mb-2" style={{ color: '#ffffff' }}>TRADER TAMIM STEP — Step Calculator</h2>
+                <p className="text-xl font-bold" style={{ color: '#64748b' }}>Win Multiplier: {winMultiplier}x</p>
              </div>
-             <p className="text-slate-700 text-sm font-black">© 2026 TRADER TAMIM STEP</p>
+             <p className="text-sm font-black" style={{ color: '#334155' }}>© 2026 TRADER TAMIM STEP</p>
           </div>
           
           <div className="grid grid-cols-3 gap-6 mb-12">
-             <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl">
-                <span className="text-xs text-slate-500 font-black uppercase mb-2 block">Amount</span>
-                <span className="text-3xl font-black">{totalAmount}</span>
+             <div className="p-6 rounded-2xl" style={{ backgroundColor: 'rgba(15, 23, 42, 0.5)', border: '1px solid #1e293b' }}>
+                <span className="text-xs font-black uppercase mb-2 block" style={{ color: '#64748b' }}>Amount</span>
+                <span className="text-3xl font-black" style={{ color: '#ffffff' }}>{totalAmount}</span>
              </div>
-             <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl">
-                <span className="text-xs text-slate-500 font-black uppercase mb-2 block">Steps</span>
-                <span className="text-3xl font-black">{stepCount}</span>
+             <div className="p-6 rounded-2xl" style={{ backgroundColor: 'rgba(15, 23, 42, 0.5)', border: '1px solid #1e293b' }}>
+                <span className="text-xs font-black uppercase mb-2 block" style={{ color: '#64748b' }}>Steps</span>
+                <span className="text-3xl font-black" style={{ color: '#ffffff' }}>{stepCount}</span>
              </div>
-             <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl">
-                <span className="text-xs text-slate-500 font-black uppercase mb-2 block">Total</span>
-                <span className="text-3xl font-black">{totalAmount}</span>
+             <div className="p-6 rounded-2xl" style={{ backgroundColor: 'rgba(15, 23, 42, 0.5)', border: '1px solid #1e293b' }}>
+                <span className="text-xs font-black uppercase mb-2 block" style={{ color: '#64748b' }}>Total</span>
+                <span className="text-3xl font-black" style={{ color: '#ffffff' }}>{totalAmount}</span>
              </div>
           </div>
 
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-[11px] text-slate-500 uppercase font-black tracking-widest">
+              <tr className="text-[11px] uppercase font-black tracking-widest" style={{ borderBottom: '1px solid #1e293b', color: '#64748b' }}>
                 <th className="py-5 px-2">Step</th>
                 <th className="py-5 px-2">Amount</th>
                 <th className="py-5 px-2">Win</th>
@@ -782,17 +782,17 @@ export default function App() {
             </thead>
             <tbody className="text-[15px] font-bold">
               {calculatedSteps.map(s => (
-                <tr key={s.step} className="border-b border-slate-900/50">
-                  <td className="py-5 px-2 text-slate-500 uppercase text-[12px]">Step {s.step}</td>
-                  <td className="py-5 px-2 text-white tabular-nums">{s.amount.toFixed(6)}</td>
-                  <td className="py-5 px-2 text-emerald-500 tabular-nums">{s.win.toFixed(6)}</td>
-                  <td className="py-5 px-2 text-right text-emerald-400 tabular-nums">+{s.profit.toFixed(6)}</td>
+                <tr key={s.step} style={{ borderBottom: '1px solid rgba(15, 23, 42, 0.5)' }}>
+                  <td className="py-5 px-2 uppercase text-[12px]" style={{ color: '#64748b' }}>Step {s.step}</td>
+                  <td className="py-5 px-2 tabular-nums" style={{ color: '#ffffff' }}>{s.amount.toFixed(6)}</td>
+                  <td className="py-5 px-2 tabular-nums" style={{ color: '#10b981' }}>{s.win.toFixed(6)}</td>
+                  <td className="py-5 px-2 text-right tabular-nums" style={{ color: '#34d399' }}>+{s.profit.toFixed(6)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div className="mt-20 flex flex-col items-center gap-2">
-             <p className="text-[11px] text-slate-700 font-black tracking-[0.3em] uppercase">© 2026 | TRADER TAMIM STEP</p>
+             <p className="text-[11px] font-black tracking-[0.3em] uppercase" style={{ color: '#334155' }}>© 2026 | TRADER TAMIM STEP</p>
           </div>
         </div>
       </div>
