@@ -192,15 +192,14 @@ export default function App() {
     const text = calculatedSteps.map(s => 
       `Step ${s.step}: ৳${s.amount.toFixed(2)} | Win: ৳${s.win.toFixed(2)} | Cumulative: ৳${s.cumulative.toFixed(2)} | Profit: +৳${s.profit.toFixed(2)}`
     ).join('\n');
-    navigator.clipboard.writeText(`EIP Trader Calculator Results:\nTotal: ৳${totalAmount}\n${text}`);
-    alert('ক্যালকুলেশন কপি করা হয়েছে!');
+    navigator.clipboard.writeText(`TRADER TAMIM STEP - Results:\nTotal: ৳${totalAmount}\n${text}`);
   };
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: '[EIP™] Step Calculator',
+          title: 'TRADER TAMIM STEP',
           text: `ট্রেডিং ক্যালকুলেশন: মোট ৳${totalAmount}, ${stepCount} টি স্টেপ।`,
           url: window.location.href,
         });
@@ -219,7 +218,7 @@ export default function App() {
       scale: 2,
     });
     const link = document.createElement('a');
-    link.download = `eip-trader-calculation-${Date.now()}.png`;
+    link.download = `trader-tamim-step-calculation-${Date.now()}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
@@ -236,7 +235,7 @@ export default function App() {
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`eip-trader-calculation-${Date.now()}.pdf`);
+    pdf.save(`trader-tamim-step-calculation-${Date.now()}.pdf`);
   };
 
   return (
@@ -707,10 +706,10 @@ export default function App() {
         <div ref={exportRef} className="w-[800px] bg-slate-950 p-12 text-white font-sans">
           <div className="mb-12 border-b border-slate-800 pb-8 flex justify-between items-end">
              <div>
-                <h2 className="text-3xl font-black tracking-tight mb-2">[EIP™] Official — Step Calculator</h2>
+                <h2 className="text-3xl font-black tracking-tight mb-2">TRADER TAMIM STEP — Step Calculator</h2>
                 <p className="text-xl text-slate-500 font-bold">Win Multiplier: {winMultiplier}x</p>
              </div>
-             <p className="text-slate-700 text-sm font-black">© 2026 EIP OFFICIAL</p>
+             <p className="text-slate-700 text-sm font-black">© 2026 TRADER TAMIM STEP</p>
           </div>
           
           <div className="grid grid-cols-3 gap-6 mb-12">
