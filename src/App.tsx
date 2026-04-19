@@ -257,12 +257,13 @@ export default function App() {
               <div className="size-10 rounded-full bg-white flex items-center justify-center shadow-md overflow-hidden border border-slate-100 scale-95">
                  <img src="https://i.ibb.co.com/TDgjj2m7/20260211-163626.jpg" alt="TRADER TAMIM" className="size-full object-cover" referrerPolicy="no-referrer" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex items-center gap-2">
                 <h1 className={cn(
-                  "font-bold text-[16px] leading-none tracking-tight",
+                  "font-black text-[14px] whitespace-nowrap tracking-tight",
                   isDarkMode ? "text-white" : "text-slate-800"
                 )}>TRADER TAMIM STEP</h1>
-                <span className="text-[12px] text-slate-500 font-medium mt-1">Professional Step Calculator</span>
+                <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden md:block" />
+                <span className="text-[11px] text-slate-500 font-bold hidden md:block">Step Calculator</span>
               </div>
             </div>
             
@@ -701,8 +702,8 @@ export default function App() {
         </main>
       </div>
 
-      {/* Hidden Export Node - For High Quality Downloads matching Second Screenshot */}
-      <div className="hidden">
+      {/* Export Node - Positioned off-screen to allow proper rendering for html2canvas */}
+      <div className="fixed -top-[5000px] left-0 pointer-events-none">
         <div ref={exportRef} className="w-[800px] bg-slate-950 p-12 text-white font-sans">
           <div className="mb-12 border-b border-slate-800 pb-8 flex justify-between items-end">
              <div>
