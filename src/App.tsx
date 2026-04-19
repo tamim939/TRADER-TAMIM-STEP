@@ -74,7 +74,6 @@ export default function App() {
   const [isCalculated, setIsCalculated] = useState(false);
   const [showError, setShowError] = useState(false);
   const [chartType, setChartType] = useState<'Bar' | 'Line' | 'Area'>('Bar');
-  const [notes, setNotes] = useState('');
   
   const containerRef = useRef<HTMLDivElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
@@ -213,7 +212,7 @@ export default function App() {
   };
 
   const handleDownloadPNG = async () => {
-    if (!exportRef.current) return;
+    if (!exportRef.current || !isCalculated) return;
     const canvas = await html2canvas(exportRef.current, {
       backgroundColor: '#0f172a',
       scale: 2,
@@ -225,7 +224,7 @@ export default function App() {
   };
 
   const handleDownloadPDF = async () => {
-    if (!exportRef.current) return;
+    if (!exportRef.current || !isCalculated) return;
     const canvas = await html2canvas(exportRef.current, {
       backgroundColor: '#0f172a',
       scale: 2,
@@ -449,18 +448,6 @@ export default function App() {
                     onChange={e => setStepCount(e.target.value === '' ? '' : Math.min(50, Math.max(1, Number(e.target.value))))}
                     className={cn(
                       "w-full border rounded-xl px-5 py-4 outline-none focus:border-blue-500 transition-all font-medium text-lg",
-                      isDarkMode ? "bg-slate-800 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"
-                    )}
-                  />
-               </div>
-               <div className="space-y-3 md:col-span-2">
-                  <label className="text-[14px] font-bold ml-2 block italic">আপনার নোট (ঐচ্ছিক)</label>
-                  <textarea 
-                    placeholder="এখানে কিছু লিখুন..."
-                    value={notes}
-                    onChange={e => setNotes(e.target.value)}
-                    className={cn(
-                      "w-full border rounded-xl px-5 py-4 outline-none focus:border-blue-500 transition-all font-medium text-md h-24 resize-none",
                       isDarkMode ? "bg-slate-800 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"
                     )}
                   />
@@ -711,8 +698,8 @@ export default function App() {
         </main>
       </div>
 
-      {/* Export Node - Positioned off-screen to allow proper rendering for html2canvas */}
-      <div className="fixed -top-[5000px] left-0 pointer-events-none">
+      {/* Export Node - Off-screen rendering fix */}
+      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
         <div ref={exportRef} className="w-[800px] bg-slate-950 p-12 text-white font-sans">
           <div className="mb-12 border-b border-slate-800 pb-8 flex justify-between items-end">
              <div>
@@ -721,13 +708,6 @@ export default function App() {
              </div>
              <p className="text-slate-700 text-sm font-black">© 2026 TRADER TAMIM STEP</p>
           </div>
-          
-          {notes && (
-            <div className="mb-8 p-6 bg-slate-900/30 border border-slate-800 rounded-2xl">
-              <span className="text-[10px] text-slate-600 font-black uppercase mb-2 block tracking-widest">Notes</span>
-              <p className="text-slate-200 text-lg font-medium italic">"{notes}"</p>
-            </div>
-          )}
           
           <div className="grid grid-cols-3 gap-6 mb-12">
              <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl">
