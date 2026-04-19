@@ -74,6 +74,7 @@ export default function App() {
   const [isCalculated, setIsCalculated] = useState(false);
   const [showError, setShowError] = useState(false);
   const [chartType, setChartType] = useState<'Bar' | 'Line' | 'Area'>('Bar');
+  const [notes, setNotes] = useState('');
   
   const containerRef = useRef<HTMLDivElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
@@ -253,45 +254,41 @@ export default function App() {
           isDarkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-100"
         )}>
           <div className="max-w-3xl mx-auto w-full flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="size-10 rounded-full bg-white flex items-center justify-center shadow-md overflow-hidden border border-slate-100 scale-95">
+            <div className="flex items-center gap-2.5">
+              <div className="size-9 rounded-full bg-white flex items-center justify-center shadow-md overflow-hidden border border-slate-100 shrink-0">
                  <img src="https://i.ibb.co.com/TDgjj2m7/20260211-163626.jpg" alt="TRADER TAMIM" className="size-full object-cover" referrerPolicy="no-referrer" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 <h1 className={cn(
-                  "font-black text-[14px] whitespace-nowrap tracking-tight",
+                  "font-black text-[13px] whitespace-nowrap tracking-tight",
                   isDarkMode ? "text-white" : "text-slate-800"
                 )}>TRADER TAMIM STEP</h1>
-                <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden md:block" />
-                <span className="text-[11px] text-slate-500 font-bold hidden md:block">Step Calculator</span>
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 ml-auto">
               <button 
                 onClick={() => setIsDarkMode(!isDarkMode)}
                 className={cn(
-                  "size-10 rounded-full border flex items-center justify-center shadow-sm transition-all active:scale-90",
+                  "size-8 rounded-full border flex items-center justify-center shadow-sm transition-all active:scale-90",
                   isDarkMode ? "bg-slate-800 border-slate-700 text-slate-300" : "bg-white border-slate-100 text-slate-600"
                 )}
               >
-                {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
               </button>
-            <div className="relative">
-                <button 
-                  onClick={() => setShowHistory(true)}
-                  className={cn(
-                    "px-4 py-2 rounded-full border flex items-center gap-2 shadow-sm transition-all active:scale-95 text-[13px] font-bold",
-                    isDarkMode ? "bg-slate-800 border-slate-700 text-slate-300" : "bg-white border-slate-100 text-slate-600"
-                  )}
-                >
-                  <History size={16} />
-                  History
-                  {history.length > 0 && (
-                    <span className="flex items-center justify-center size-5 bg-blue-500 text-white rounded-full text-[10px] font-black">{history.length}</span>
-                  )}
-                </button>
-              </div>
+              <button 
+                onClick={() => setShowHistory(true)}
+                className={cn(
+                  "h-8 px-3 rounded-full border flex items-center gap-1.5 shadow-sm transition-all active:scale-95 text-[11px] font-bold",
+                  isDarkMode ? "bg-slate-800 border-slate-700 text-slate-300" : "bg-white border-slate-100 text-slate-600"
+                )}
+              >
+                <History size={14} />
+                <span className="hidden sm:inline">History</span>
+                {history.length > 0 && (
+                  <span className="flex items-center justify-center size-4 bg-blue-500 text-white rounded-full text-[9px] font-black">{history.length}</span>
+                )}
+              </button>
             </div>
           </div>
         </header>
@@ -452,6 +449,18 @@ export default function App() {
                     onChange={e => setStepCount(e.target.value === '' ? '' : Math.min(50, Math.max(1, Number(e.target.value))))}
                     className={cn(
                       "w-full border rounded-xl px-5 py-4 outline-none focus:border-blue-500 transition-all font-medium text-lg",
+                      isDarkMode ? "bg-slate-800 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"
+                    )}
+                  />
+               </div>
+               <div className="space-y-3 md:col-span-2">
+                  <label className="text-[14px] font-bold ml-2 block italic">আপনার নোট (ঐচ্ছিক)</label>
+                  <textarea 
+                    placeholder="এখানে কিছু লিখুন..."
+                    value={notes}
+                    onChange={e => setNotes(e.target.value)}
+                    className={cn(
+                      "w-full border rounded-xl px-5 py-4 outline-none focus:border-blue-500 transition-all font-medium text-md h-24 resize-none",
                       isDarkMode ? "bg-slate-800 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"
                     )}
                   />
@@ -713,6 +722,13 @@ export default function App() {
              <p className="text-slate-700 text-sm font-black">© 2026 TRADER TAMIM STEP</p>
           </div>
           
+          {notes && (
+            <div className="mb-8 p-6 bg-slate-900/30 border border-slate-800 rounded-2xl">
+              <span className="text-[10px] text-slate-600 font-black uppercase mb-2 block tracking-widest">Notes</span>
+              <p className="text-slate-200 text-lg font-medium italic">"{notes}"</p>
+            </div>
+          )}
+          
           <div className="grid grid-cols-3 gap-6 mb-12">
              <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl">
                 <span className="text-xs text-slate-500 font-black uppercase mb-2 block">Amount</span>
@@ -730,26 +746,26 @@ export default function App() {
 
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-[10px] text-slate-600 uppercase font-black tracking-widest">
-                <th className="py-4 px-2">Step</th>
-                <th className="py-4 px-2">Amount</th>
-                <th className="py-4 px-2">Win</th>
-                <th className="py-4 px-2 text-right">Profit</th>
+              <tr className="border-b border-slate-800 text-[11px] text-slate-500 uppercase font-black tracking-widest">
+                <th className="py-5 px-2">Step</th>
+                <th className="py-5 px-2">Amount</th>
+                <th className="py-5 px-2">Win</th>
+                <th className="py-5 px-2 text-right">Profit</th>
               </tr>
             </thead>
-            <tbody className="text-sm font-bold">
+            <tbody className="text-[15px] font-bold">
               {calculatedSteps.map(s => (
                 <tr key={s.step} className="border-b border-slate-900/50">
-                  <td className="py-4 px-2 text-slate-500">Step {s.step}</td>
-                  <td className="py-4 px-2">{s.amount.toFixed(6)}</td>
-                  <td className="py-4 px-2 text-emerald-500">{s.win.toFixed(6)}</td>
-                  <td className="py-4 px-2 text-right text-emerald-400">+{s.profit.toFixed(6)}</td>
+                  <td className="py-5 px-2 text-slate-500 uppercase text-[12px]">Step {s.step}</td>
+                  <td className="py-5 px-2 text-white tabular-nums">{s.amount.toFixed(6)}</td>
+                  <td className="py-5 px-2 text-emerald-500 tabular-nums">{s.win.toFixed(6)}</td>
+                  <td className="py-5 px-2 text-right text-emerald-400 tabular-nums">+{s.profit.toFixed(6)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className="mt-20 flex justify-center">
-             <p className="text-[10px] text-slate-800 font-black tracking-[0.5em] uppercase">Built for Professionals</p>
+          <div className="mt-20 flex flex-col items-center gap-2">
+             <p className="text-[11px] text-slate-700 font-black tracking-[0.3em] uppercase">© 2026 | TRADER TAMIM STEP</p>
           </div>
         </div>
       </div>
