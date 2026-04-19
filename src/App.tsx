@@ -74,6 +74,7 @@ export default function App() {
   const [isCalculated, setIsCalculated] = useState(false);
   const [showError, setShowError] = useState(false);
   const [chartType, setChartType] = useState<'Bar' | 'Line' | 'Area'>('Bar');
+  const [isExporting, setIsExporting] = useState(false);
   
   const containerRef = useRef<HTMLDivElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
@@ -212,30 +213,61 @@ export default function App() {
   };
 
   const handleDownloadPNG = async () => {
-    if (!exportRef.current || !isCalculated) return;
-    const canvas = await html2canvas(exportRef.current, {
-      backgroundColor: '#0f172a',
-      scale: 2,
-    });
-    const link = document.createElement('a');
-    link.download = `trader-tamim-step-calculation-${Date.now()}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    if (!exportRef.current || isExporting) return;
+    if (!isCalculated) {
+      alert('প্রথমে ক্যালকুলেট করুন!');
+      return;
+    }
+    setIsExporting(true);
+    try {
+      // Ensure the element is visible enough for html2canvas
+      const canvas = await html2canvas(exportRef.current, {
+        backgroundColor: '#0f172a',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = `trader-tamim-step-calculation-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error: any) {
+      console.error('PNG download failed:', error);
+      alert('PNG ডাউনলোড করতে সমস্যা হয়েছে: ' + error.message);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleDownloadPDF = async () => {
-    if (!exportRef.current || !isCalculated) return;
-    const canvas = await html2canvas(exportRef.current, {
-      backgroundColor: '#0f172a',
-      scale: 2,
-    });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`trader-tamim-step-calculation-${Date.now()}.pdf`);
+    if (!exportRef.current || isExporting) return;
+    if (!isCalculated) {
+      alert('প্রথমে ক্যালকুলেট করুন!');
+      return;
+    }
+    setIsExporting(true);
+    try {
+      const canvas = await html2canvas(exportRef.current, {
+        backgroundColor: '#0f172a',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+      });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`trader-tamim-step-calculation-${Date.now()}.pdf`);
+    } catch (error: any) {
+      console.error('PDF download failed:', error);
+      alert('PDF ডাউনলোড করতে সমস্যা হয়েছে: ' + error.message);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -654,17 +686,25 @@ export default function App() {
                 )}>
                   <Share2 size={16} /> Share
                 </button>
-                <button onClick={handleDownloadPNG} className={cn(
-                  "flex-1 min-w-[100px] flex items-center justify-center gap-2 py-4 rounded-xl border font-bold text-[13px] shadow-sm active:scale-95 transition-all text-emerald-600",
-                  isDarkMode ? "bg-emerald-900/30 border-emerald-900/50 text-emerald-400" : "bg-emerald-50 border-emerald-100"
+                <button 
+                  onClick={handleDownloadPNG} 
+                  disabled={isExporting}
+                  className={cn(
+                  "flex-1 min-w-[100px] flex items-center justify-center gap-2 py-4 rounded-xl border font-bold text-[13px] shadow-sm active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                  isDarkMode ? "bg-emerald-900/30 border-emerald-900/50 text-emerald-400" : "bg-emerald-50 border-emerald-100 text-emerald-600"
                 )}>
-                  <FileImage size={16} /> PNG
+                  {isExporting ? <RotateCcw size={16} className="animate-spin" /> : <FileImage size={16} />} 
+                  {isExporting ? 'Wait...' : 'PNG'}
                 </button>
-                <button onClick={handleDownloadPDF} className={cn(
-                  "flex-1 min-w-[100px] flex items-center justify-center gap-2 py-4 rounded-xl border font-bold text-[13px] shadow-sm active:scale-95 transition-all text-purple-600",
-                  isDarkMode ? "bg-purple-900/30 border-purple-900/50 text-purple-400" : "bg-purple-50 border-purple-100"
+                <button 
+                  onClick={handleDownloadPDF} 
+                  disabled={isExporting}
+                  className={cn(
+                  "flex-1 min-w-[100px] flex items-center justify-center gap-2 py-4 rounded-xl border font-bold text-[13px] shadow-sm active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                  isDarkMode ? "bg-purple-900/30 border-purple-900/50 text-purple-400" : "bg-purple-50 border-purple-100 text-purple-600"
                 )}>
-                  <FileText size={16} /> PDF
+                  {isExporting ? <RotateCcw size={16} className="animate-spin" /> : <FileText size={16} />} 
+                  {isExporting ? 'Wait...' : 'PDF'}
                 </button>
               </div>
             </motion.div>
@@ -698,9 +738,16 @@ export default function App() {
         </main>
       </div>
 
-      {/* Export Node - Off-screen rendering fix */}
-      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
-        <div ref={exportRef} className="w-[800px] bg-slate-950 p-12 text-white font-sans">
+      {/* Export Node - Container optimized for html2canvas capture */}
+      <div style={{ 
+        position: 'absolute', 
+        left: '0', 
+        top: '0', 
+        opacity: '0.001', 
+        pointerEvents: 'none', 
+        zIndex: '-50'
+      }}>
+        <div ref={exportRef} className="w-[800px] bg-[#0f172a] p-12 text-white font-sans" style={{ minHeight: '1000px' }}>
           <div className="mb-12 border-b border-slate-800 pb-8 flex justify-between items-end">
              <div>
                 <h2 className="text-3xl font-black tracking-tight mb-2">TRADER TAMIM STEP — Step Calculator</h2>
